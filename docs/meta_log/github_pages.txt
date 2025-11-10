@@ -1,0 +1,60 @@
+時系列
+
+- Github Pages の doc を閲覧しながら学習ノート公開用のリポジトリを作成した。
+
+- 設定項目として Branch を main,公開用フォルダを/docs に設定
+- main ブランチから work ブランチを切った
+- ノートをリモートへ push すると、自動的に ci/cd(Github Actions)が発火
+- 1 回目のエラー
+  - build job にてエラー
+  - ui の annotation にて error 発生箇所を確認
+    - log をダウンロードできたのでダウンロード
+    - log を確認
+    - log の内容と一致していることを確認
+  - エラー内容:
+    - Error: No such file or directory @ dir_chdir0 - /github/workspace/docs
+    - 検索キーワード "jekyll no such file or directory dir0 github pages"
+    - https://github.com/orgs/community/discussions/122202
+      - A few things:In your Pages settings you currently have configured Pages to use the /docs folder but there is no such folder in your repo. So you probably want to change that to / instead.Your site is now building with Jekyll because your .nojekyll file is under / instead of under /docs (but see previous point)
+  - エラー内容から push 時のプロジェクトツリーつまり現在最新のプロジェクトツリーを local 及び main ブランチともに調べた
+    - doc になっていた
+  - issue を上げる(https://github.com/linuxfirstMint/web_learning_notes/issues/2)
+  - issue から issue 番号を元にブランチ(issue2)を切った。
+    - このとき、work ブランチにいたが vscode の ui で issue からブランチを切れる機能を使って、issu2 ブランチを切った(main ベース)
+  - 対応
+    - doc から docs に変更
+    - issue2 ブランチから work ブランチへプルリク
+      - マージ
+    - work ブランチから main ブランチへプルリク
+      - マージ
+      - この時、感じたこと...めんどくさい
+        - 個人でやる分には作業ブランチを切らずに main から issue ブランチを切ったほうが楽と感じた
+  - main ブランチへ反映後、 https://linuxfirstmint.github.io/web_learning_notes/を確認
+  - 変化無し(404 not found)
+  - 原因を探る
+    - 検索ワード "github pages index.md"
+      - ここで思い出す
+        - 公開用フォルダは docs であること
+          - index.md の配置はこの時点ではプロジェクト直下だった
+          - index.md の配置を docs 配下に変更することを検討
+          - issue を立てる(https://github.com/linuxfirstMint/web_learning_notes/issues/5)
+  - main ブランチから issue5 ブランチを切る
+  - 対応
+    - index.md を docs 配下に移動
+      - issue5 ブランチから main ブランチへプルリク
+        - この時、work ブランチの存在を忘れている。
+  - main ブランチへ反映後、 https://linuxfirstmint.github.io/web_learning_notes/を確認
+  - 表示した！
+  - 次に webhint_viewport のノートへリンクを踏んだ
+  - 404 not found
+  - 原因を探る
+    - url が"https://linuxfirstmint.github.io/web_learning_notes/doc/webhint_viewport.md"のdocが気になった
+      - doc→docs で修正を挟んだから docs になってないとおかしくないか？
+    - index.md のトップページを edge の devtools で確認した
+    - web の ui 上で直接的にノートへ飛ぶのはアンカーリンクのみだったから href をみた - index.md を docs 配下に移動したからパスがずれた？ - issue を立てる(https://github.com/linuxfirstMint/web_learning_notes/issues/7) - main ブランチから issue7 ブランチを切った -対応
+    - href のパスを"doc/webhin_viewport.md"から"webhin_viewport.md"へ変更
+    - ローカルで遷移することを確認
+    - main ブランチへプルリク
+  - main ブランチへ反映後、 https://linuxfirstmint.github.io/web_learning_notes/を確認
+  - いけた！！！！
+  - 今振り返りつつ、気になるところを issue としてたててる
